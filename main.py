@@ -54,11 +54,16 @@ def add():
     add_content = []
     for i in range(len(graph)):
         while True:
-            in_content = str(input('{:{}}'.format(graph[i]+':', indent)))
-            if(len(in_content) > 100):
-                print('100 characters maximum')
-            else:
+            if(i == 6):
+                in_content = str(input('{:{}}'.format(graph[i]+':', indent)))
+                in_content = in_content.split(', ')
                 break
+            else:
+                in_content = str(input('{:{}}'.format(graph[i]+':', indent)))
+                if(len(in_content) > 100):
+                    print('100 characters maximum')
+                else:
+                    break
         add_content.append(in_content)
         json_content[graph[i]] = add_content[i]
     json_content['Date add'] = str(datetime.now())
@@ -66,7 +71,7 @@ def add():
         content = json.load(file)
     with open(db, 'w') as file:
         content['header']['last update'] = str(datetime.now())
-        content[str(len(content))] = json_content
+        content[str(len(content)+1)] = json_content
         json.dump(content, file, indent=4, sort_keys=True)
     backup()
 
@@ -138,22 +143,23 @@ def show_all():
                 i = str(i)
                 print('{dash}\n{i1:{i}} {i2}\n{n1:{i}} {n2}\n{l1:{i}} {l2}\n{d1:{i}} {d2}\n{d3:{i}} {d4}\n\
 {c1:{i}} {c2:{i}}\n{c3:{i}} {c4}\n{t1:{i}} {t2}'.format(
-                        i1='id:',        i2=i.zfill(3),            # ID
-                        n1=graph[0]+':', n2=content[i][graph[0]],  # Name
-                        l1=graph[1]+':', l2=content[i][graph[1]],  # Location
-                        d1=graph[2]+':', d2=content[i][graph[2]],  # Date buy
-                        d3=graph[3]+':', d4=content[i][graph[3]],  # Date exchange
-                        c1=graph[4]+':', c2=content[i][graph[4]],  # Cost
-                        c3=graph[5]+':', c4=content[i][graph[5]],  # Cost exchange
-                        t1=graph[6]+':', t2=content[i][graph[6]],  # Tags
-                        dash='-'*80, i=indent))
+                    i1='id:',        i2=i.zfill(3),            # ID
+                    n1=graph[0]+':', n2=content[i][graph[0]],  # Name
+                    l1=graph[1]+':', l2=content[i][graph[1]],  # Location
+                    d1=graph[2]+':', d2=content[i][graph[2]],  # Date buy
+                    d3=graph[3]+':', d4=content[i][graph[3]],  # Date exchange
+                    c1=graph[4]+':', c2=content[i][graph[4]],  # Cost
+                    c3=graph[5]+':', c4=content[i][graph[5]],  # Cost exchange
+                    t1=graph[6]+':', t2=', '.join(content[i][graph[6]]),  # Tags
+                    dash='-'*80, i=indent))
                 ii += 1
 
 
 def item_show(element):
     with open(db, 'r') as file:
         content = json.load(file)
-        for i in element:
+        try:
+            for i in element:
                 print('{dash}\n{i1:{i}} {i2}\n{n1:{i}} {n2}\n{l1:{i}} {l2}\n{d1:{i}} {d2}\n{d3:{i}} {d4}\n\
 {c1:{i}} {c2:{i}}\n{c3:{i}} {c4}\n{t1:{i}} {t2}\n{dash}'.format(
                     i1='id:',        i2=i.zfill(3),            # ID
@@ -163,8 +169,10 @@ def item_show(element):
                     d3=graph[3]+':', d4=content[i][graph[3]],  # Date exchange
                     c1=graph[4]+':', c2=content[i][graph[4]],  # Cost
                     c3=graph[5]+':', c4=content[i][graph[5]],  # Cost exchange
-                    t1=graph[6]+':', t2=content[i][graph[6]],  # Tags
+                    t1=graph[6]+':', t2=', '.join(content[i][graph[6]]),  # Tags
                     dash='-'*80, i=indent))
+        except KeyError:
+            print('There is no items with id #{}'.format(''.join(element)))
 
 
 def item_edit(element):
@@ -179,16 +187,21 @@ def item_edit(element):
                     d3=graph[3]+':', d4=content[i][graph[3]],  # Date exchange
                     c1=graph[4]+':', c2=content[i][graph[4]],  # Cost
                     c3=graph[5]+':', c4=content[i][graph[5]],  # Cost exchange
-                    t1=graph[6]+':', t2=content[i][graph[6]],  # Tags
+                    t1=graph[6]+':', t2=', '.join(content[i][graph[6]]),  # Tags
                     dash='-'*80, i=indent))
     add_content = []
     for i in range(len(graph)):
         while True:
-            in_content = str(input('{:{}}'.format(graph[i]+':', indent)))
-            if(len(in_content) > 100):
-                print('100 characters maximum')
-            else:
+            if(i == 6):
+                in_content = str(input('{:{}}'.format(graph[i]+':', indent)))
+                in_content = in_content.split(', ')
                 break
+            else:
+                in_content = str(input('{:{}}'.format(graph[i]+':', indent)))
+                if(len(in_content) > 100):
+                    print('100 characters maximum')
+                else:
+                    break
         add_content.append(in_content)
         json_content[graph[i]] = add_content[i]
     json_content['Date add'] = str(datetime.now())
