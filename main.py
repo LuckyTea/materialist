@@ -107,16 +107,19 @@ def show_control():
             show_all()
         elif(com[0] == 'show'):
             com.remove('show')
-            item_show(com)
+            if(len(com) >= 1):
+                item_show(com)
+            else:
+                print('!!! This command should have atlesat one argument !!!')
         elif(com[0] == 'edit'):
             com.remove('edit')
-            if(len(com) > 1):
-                print('This command can have only one argument')
+            if(len(com) >= 1):
+                print('!!! This command can have only one argument !!!')
             else:
                 item_edit(com)
         elif(com[0] == 'delete'):
             com.remove('delete')
-            if(len(com) > 1):
+            if(len(com) > 1 and len(com) < 0):
                 print('This command can have only one argument')
             else:
                 item_delete(com)
