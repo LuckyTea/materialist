@@ -111,6 +111,12 @@ def show_control():
                 item_show(com)
             else:
                 print('!!! This command should have atlesat one argument !!!')
+        elif(com[0] == 'tag'):
+            com.remove('tag')
+            if(len(com) >= 1):
+                search_tag(com)
+            else:
+                print('!!! This command should have atlesat one argument !!!')
         elif(com[0] == 'edit'):
             com.remove('edit')
             if(len(com) >= 1):
@@ -225,6 +231,23 @@ def item_delete(element):
         content['header']['last update'] = str(datetime.now())
         json.dump(content, file, indent=4, sort_keys=True)
     backup()
+
+
+def search_tag(tag_list):
+    elements_with_tag.append(i) = []
+    with open(db, 'r') as file:
+        content = json.load(file)
+    if(len(tag_list) > 1):
+        for t in tag_list:
+            for i in sort_list(content):
+                if(t in content[str(i)][graph[6]]):
+                    i = str(i)
+                    print(content[i][graph[0]])
+    else:
+        for i in sort_list(content):
+                if(t in content[str(i)][graph[6]]):
+                    i = str(i)
+                    print(content[i][graph[0]])
 
 
 def remove_base():
