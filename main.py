@@ -234,20 +234,19 @@ def item_delete(element):
 
 
 def search_tag(tag_list):
-    elements_with_tag.append(i) = []
+    result_list = []
     with open(db, 'r') as file:
         content = json.load(file)
-    if(len(tag_list) > 1):
-        for t in tag_list:
-            for i in sort_list(content):
-                if(t in content[str(i)][graph[6]]):
-                    i = str(i)
-                    print(content[i][graph[0]])
+    for i in sort_list(content):
+        result = list(set(tag_list) & set(content[str(i)][graph[6]].split(', ')))
+        if(len(result) == len(tag_list)):
+            i = str(i)
+            result_list.append(content[i][graph[0]])
+    if(len(result_list) > 0):
+        for i in result_list:
+            print(i)
     else:
-        for i in sort_list(content):
-                if(t in content[str(i)][graph[6]]):
-                    i = str(i)
-                    print(content[i][graph[0]])
+        print('Nothing find')
 
 
 def remove_base():
