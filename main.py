@@ -6,9 +6,10 @@ content = {}
 json_content = {}
 host = os.listdir()
 db = 'data.dat'
+db_ver = 2
 indent = 15
 header = {'base': 'alpha 001', 'last update': str(datetime.now())}
-graph = ['Name', 'Location', 'Date buy', 'Date exchange', 'Cost', 'Cost exchange', 'Tags']
+graph = ['Name', 'Location', 'Date buy', 'Date exchange', 'Cost', 'Cost exchange', 'Tags', 'ID']
 
 
 def init():
@@ -22,6 +23,7 @@ def init():
                     init_header()
             except ValueError:
                 init_header()
+    init_db_version()
     main()
 
 
@@ -29,6 +31,23 @@ def init_header():
     with open(db, 'w') as file:
         content['header'] = header
         json.dump(content, file, indent=4)
+
+
+def init_db_version():
+    with open(db, 'r') as file:
+        content = json.load(file)
+    db_ver_cur = content['header']['base']
+    if(i == db_ver):
+        pass
+    else:
+        print('DB needs update')
+        backup()
+        '''
+        if(db_ver_cur == 1):
+            for i in sort_list(content):
+                i = str(i)
+                print('#{} {} {}'.format(i.zfill(3), graph[0]+':', content[i][graph[0]]))
+        '''
 
 
 def main():
@@ -52,7 +71,7 @@ def main():
 
 def add():
     add_content = []
-    for i in range(len(graph)):
+    for i in range(len(graph) - 1):
         while True:
             if(i == 6):
                 in_content = str(input('{:{}}'.format(graph[i]+':', indent)))
@@ -199,7 +218,7 @@ def item_edit(element):
                     t1=graph[6]+':', t2=', '.join(content[i][graph[6]]),  # Tags
                     dash='-'*80, i=indent))
     add_content = []
-    for i in range(len(graph)):
+    for i in range(len(graph) - 1):
         while True:
             if(i == 6):
                 in_content = str(input('{:{}}'.format(graph[i]+':', indent)))
