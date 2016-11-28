@@ -8,7 +8,7 @@ host = os.listdir()
 db = 'data.dat'
 db_ver = 2
 indent = 15
-header = {'base': 'alpha 001', 'last update': str(datetime.now())}
+header = {'base': db_ver, 'last update': str(datetime.now())}
 graph = ['Name', 'Location', 'Date buy', 'Date exchange', 'Cost', 'Cost exchange', 'Tags', 'ID']
 
 
@@ -37,17 +37,19 @@ def init_db_version():
     with open(db, 'r') as file:
         content = json.load(file)
     db_ver_cur = content['header']['base']
-    if(i == db_ver):
+    if(db_ver_cur == db_ver):
         pass
     else:
         print('DB needs update')
         backup()
-        '''
         if(db_ver_cur == 1):
             for i in sort_list(content):
                 i = str(i)
-                print('#{} {} {}'.format(i.zfill(3), graph[0]+':', content[i][graph[0]]))
-        '''
+                content[i][graph[7]] = i
+            content['header']['base'] = db_ver
+            with open(db, 'w') as file:
+                content['header']['last update'] = str(datetime.now())
+                json.dump(content, file, indent=4, sort_keys=True)
 
 
 def main():
@@ -71,11 +73,16 @@ def main():
 
 def add():
     add_content = []
-    for i in range(len(graph) - 1):
+    with open(db, 'r') as file:
+        content = json.load(file)
+    for i in range(len(graph)):
         while True:
             if(i == 6):
                 in_content = str(input('{:{}}'.format(graph[i]+':', indent)))
                 in_content = in_content.split(', ')
+                break
+            elif(i == 7):
+                in_content = str(len(content)+1)
                 break
             else:
                 in_content = str(input('{:{}}'.format(graph[i]+':', indent)))
@@ -86,11 +93,10 @@ def add():
         add_content.append(in_content)
         json_content[graph[i]] = add_content[i]
     json_content['Date add'] = str(datetime.now())
-    with open(db, 'r') as file:
-        content = json.load(file)
     with open(db, 'w') as file:
         content['header']['last update'] = str(datetime.now())
-        content[str(len(content)+1)] = json_content
+        i = sort_list(content)
+        content[str(i[-1] + 1)] = json_content
         json.dump(content, file, indent=4, sort_keys=True)
     backup()
 
